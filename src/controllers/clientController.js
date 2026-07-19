@@ -1,142 +1,164 @@
-// backend/src/controllers/clientController.js
-import Client from '../models/Client.js';
+import mongoose from "mongoose";
+import Client from "../models/Client.js";
 
-// Get all clients
+// Get All Clients
 export const getClients = async (req, res) => {
-    try {
-        const clients = await Client.find({}).sort({ createdAt: -1 });
-        res.json({
-            success: true,
-            data: clients
-        });
-    } catch (error) {
-        console.error('❌ Get clients error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-            message: error.message
-        });
-    }
+  try {
+    const clients = await Client.find().sort({ createdAt: -1 }).lean();
+
+    return res.status(200).json({
+      success: true,
+      data: clients,
+    });
+  } catch (error) {
+    console.error("Get Clients Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
 };
 
-// Get single client by ID
+// Get Client By Id
 export const getClientById = async (req, res) => {
-    try {
-        const client = await Client.findById(req.params.id);
-        if (!client) {
-            return res.status(404).json({
-                success: false,
-                error: 'Client not found'
-            });
-        }
-        res.json({
-            success: true,
-            data: client
-        });
-    } catch (error) {
-        console.error('❌ Get client by ID error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-            message: error.message
-        });
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid client id",
+      });
     }
+
+    const client = await Client.findById(req.params.id).lean();
+
+    if (!client) {
+      return res.status(404).json({
+        success: false,
+        message: "Client not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: client,
+    });
+  } catch (error) {
+    console.error("Get Client Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
 };
 
-// Create new client
+// Create Client
 export const createClient = async (req, res) => {
-    try {
-        const { name, company, apiEndpoint, apiKey, fieldMapping, isActive } = req.body;
-        
-        if (!name || !apiEndpoint) {
-            return res.status(400).json({
-                success: false,
-                error: 'Name and API endpoint are required'
-            });
-        }
-        
-        const client = new Client({
-            name,
-            company,
-            apiEndpoint,
-            apiKey,
-            fieldMapping,
-            isActive
-        });
-        
-        await client.save();
-        res.status(201).json({
-            success: true,
-            data: client
-        });
-    } catch (error) {
-        console.error('❌ Create client error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-            message: error.message
-        });
+  try {
+    const { name, company, description, isActive } = req.body;
+
+    const client = await Client.create({
+      name,
+      company,
+      description,
+      isActive,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Client created successfully",
+      data: client,
+    });
+  } catch (error) {
+    console.error("Create Client Error:", error);
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "Client name already exists",
+      });
     }
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
-// Update client
+// Update Client
 export const updateClient = async (req, res) => {
-    try {
-        const { name, company, apiEndpoint, apiKey, fieldMapping, isActive } = req.body;
-        
-        const client = await Client.findById(req.params.id);
-        if (!client) {
-            return res.status(404).json({
-                success: false,
-                error: 'Client not found'
-            });
-        }
-        
-        if (name) client.name = name;
-        if (company !== undefined) client.company = company;
-        if (apiEndpoint) client.apiEndpoint = apiEndpoint;
-        if (apiKey !== undefined) client.apiKey = apiKey;
-        if (fieldMapping !== undefined) client.fieldMapping = fieldMapping;
-        if (isActive !== undefined) client.isActive = isActive;
-        
-        await client.save();
-        res.json({
-            success: true,
-            data: client
-        });
-    } catch (error) {
-        console.error('❌ Update client error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-            message: error.message
-        });
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid client id",
+      });
     }
+
+    const client = await Client.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!client) {
+      return res.status(404).json({
+        success: false,
+        message: "Client not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Client updated successfully",
+      data: client,
+    });
+  } catch (error) {
+    console.error("Update Client Error:", error);
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "Client name already exists",
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
-// Delete client
+// Delete Client
 export const deleteClient = async (req, res) => {
-    try {
-        const client = await Client.findById(req.params.id);
-        if (!client) {
-            return res.status(404).json({
-                success: false,
-                error: 'Client not found'
-            });
-        }
-        
-        await Client.findByIdAndDelete(req.params.id);
-        
-        res.json({
-            success: true,
-            message: 'Client deleted successfully'
-        });
-    } catch (error) {
-        console.error('❌ Delete client error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Internal server error',
-            message: error.message
-        });
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid client id",
+      });
     }
+
+    const client = await Client.findByIdAndDelete(req.params.id);
+
+    if (!client) {
+      return res.status(404).json({
+        success: false,
+        message: "Client not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Client deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete Client Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
 };
