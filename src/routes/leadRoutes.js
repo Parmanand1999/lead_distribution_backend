@@ -1,15 +1,16 @@
 // backend/src/routes/leadRoutes.js
-const express = require('express');
+import express from 'express';
+import { handleLead, getLeads, getLeadById } from '../controllers/leadController.js';
+
 const router = express.Router();
-const leadController = require('../controllers/leadController');
 
 // POST /api/lead - Receive new lead
-router.post('/lead', leadController.handleLead);
+router.post('/lead', handleLead);
 
 // GET /api/leads - Get all leads with filters
-router.get('/leads', leadController.getLeads);
+router.get('/leads', getLeads);
 
 // GET /api/leads/:id - Get single lead
-router.get('/leads/:id', leadController.getLeadById);
+router.get('/leads/:id', getLeadById);
 
-module.exports = router;
+export default router;

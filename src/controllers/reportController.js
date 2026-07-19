@@ -1,9 +1,9 @@
 // backend/src/controllers/reportController.js
-const Lead = require('../models/Lead');
-const Client = require('../models/Client');
+import Lead from '../models/Lead.js';
+import Client from '../models/Client.js';
 
 // Get overall statistics for dashboard
-exports.getDashboardStats = async (req, res) => {
+export const getDashboardStats = async (req, res) => {
     try {
         // Total, Success, Failed counts
         const stats = await Lead.aggregate([

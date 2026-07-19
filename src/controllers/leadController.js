@@ -1,13 +1,13 @@
 // backend/src/controllers/leadController.js
-const distributionService = require('../services/distributionService');
-const Lead = require('../models/Lead');
+import distributionService from '../services/distributionService.js';
+import Lead from '../models/Lead.js';
 
 /**
  * Lead Controller
  * 
  * Lead se related saare API endpoints handle karega
  */
-exports.handleLead = async (req, res) => {
+export const handleLead = async (req, res) => {
     try {
         const { source, data } = req.body;
         
@@ -47,7 +47,7 @@ exports.handleLead = async (req, res) => {
     }
 };
 
-exports.getLeads = async (req, res) => {
+export const getLeads = async (req, res) => {
     try {
         const { 
             source, 
@@ -104,7 +104,7 @@ exports.getLeads = async (req, res) => {
     }
 };
 
-exports.getLeadById = async (req, res) => {
+export const getLeadById = async (req, res) => {
     try {
         const { id } = req.params;
         

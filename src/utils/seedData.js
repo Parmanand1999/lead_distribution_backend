@@ -1,7 +1,9 @@
 // backend/src/utils/seedData.js
-const Client = require('../models/Client');
-const Rule = require('../models/Rule');
-const mongoose = require('mongoose');
+import Client from '../models/Client.js';
+import Rule from '../models/Rule.js';
+import mongoose from 'mongoose';
+import connectDB from '../config/database.js';
+import { fileURLToPath } from 'url';
 
 async function seedDummyData() {
     try {
@@ -101,13 +103,13 @@ async function seedDummyData() {
     }
 }
 
-// Run if directly called
-if (require.main === module) {
-    require('../config/database')();
-    seedDummyData().then(() => {
-        mongoose.connection.close();
+const isDirectRun = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+if (isDirectRun) {
+    connectDB().then(async () => {
+        await seedDummyData();
+        await mongoose.connection.close();
         console.log('💤 Database connection closed');
     });
 }
 
-module.exports = seedDummyData;
+export default seedDummyData;

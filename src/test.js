@@ -1,7 +1,7 @@
 // test.js - Create a test file
 // Run: node test.js
 
-const axios = require('axios');
+import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000/api';
 

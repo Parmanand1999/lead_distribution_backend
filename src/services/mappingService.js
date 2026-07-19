@@ -192,4 +192,4 @@ class MappingService {
 }
 
 // Singleton instance export
-module.exports = new MappingService();
+export default new MappingService();

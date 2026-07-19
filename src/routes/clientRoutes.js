@@ -1,12 +1,19 @@
 // backend/src/routes/clientRoutes.js
-const express = require('express');
+import express from 'express';
+import {
+    getClients,
+    getClientById,
+    createClient,
+    updateClient,
+    deleteClient
+} from '../controllers/clientController.js';
+
 const router = express.Router();
-const clientController = require('../controllers/clientController');
 
-router.get('/clients', clientController.getClients);
-router.get('/clients/:id', clientController.getClientById);
-router.post('/clients', clientController.createClient);
-router.put('/clients/:id', clientController.updateClient);
-router.delete('/clients/:id', clientController.deleteClient);
+router.get('/clients', getClients);
+router.get('/clients/:id', getClientById);
+router.post('/clients', createClient);
+router.put('/clients/:id', updateClient);
+router.delete('/clients/:id', deleteClient);
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
 // backend/src/models/Lead.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 /**
  * Lead Schema
@@ -108,4 +108,5 @@ leadSchema.methods.markAsFailed = function(errorMessage) {
     return this.save();
 };
 
-module.exports = mongoose.model('Lead', leadSchema);
+const Lead = mongoose.model('Lead', leadSchema);
+export default Lead;

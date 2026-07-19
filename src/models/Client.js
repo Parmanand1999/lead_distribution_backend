@@ -1,5 +1,5 @@
 // backend/src/models/Client.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 /**
  * Client Schema
@@ -78,4 +78,5 @@ const clientSchema = new mongoose.Schema({
 clientSchema.index({ name: 1 });
 clientSchema.index({ isActive: 1 });
 
-module.exports = mongoose.model('Client', clientSchema);
+const Client = mongoose.model('Client', clientSchema);
+export default Client;

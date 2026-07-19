@@ -1,8 +1,9 @@
 // backend/src/routes/reportRoutes.js
-const express = require('express');
+import express from 'express';
+import { getDashboardStats } from '../controllers/reportController.js';
+
 const router = express.Router();
-const reportController = require('../controllers/reportController');
 
-router.get('/reports/dashboard', reportController.getDashboardStats);
+router.get('/reports/dashboard', getDashboardStats);
 
-module.exports = router;
+export default router;

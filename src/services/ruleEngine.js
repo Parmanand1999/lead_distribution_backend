@@ -1,5 +1,5 @@
 // backend/src/services/ruleEngine.js
-const Rule = require('../models/Rule');
+import Rule from '../models/Rule.js';
 
 /**
  * Rule Engine Service
@@ -130,4 +130,4 @@ class RuleEngine {
 }
 
 // Singleton instance export
-module.exports = new RuleEngine();
+export default new RuleEngine();

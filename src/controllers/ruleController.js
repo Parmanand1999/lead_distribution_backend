@@ -1,8 +1,8 @@
 // backend/src/controllers/ruleController.js
-const Rule = require('../models/Rule');
+import Rule from '../models/Rule.js';
 
 // Get all rules
-exports.getRules = async (req, res) => {
+export const getRules = async (req, res) => {
     try {
         const rules = await Rule.find({})
             .populate('clientId', 'name company')
@@ -22,7 +22,7 @@ exports.getRules = async (req, res) => {
 };
 
 // Get single rule
-exports.getRuleById = async (req, res) => {
+export const getRuleById = async (req, res) => {
     try {
         const rule = await Rule.findById(req.params.id).populate('clientId', 'name company');
         if (!rule) {
@@ -46,7 +46,7 @@ exports.getRuleById = async (req, res) => {
 };
 
 // Create a new rule
-exports.createRule = async (req, res) => {
+export const createRule = async (req, res) => {
     try {
         const { name, clientId, conditions, priority, isActive } = req.body;
         
@@ -81,7 +81,7 @@ exports.createRule = async (req, res) => {
 };
 
 // Update rule
-exports.updateRule = async (req, res) => {
+export const updateRule = async (req, res) => {
     try {
         const { name, clientId, conditions, priority, isActive } = req.body;
         
@@ -115,7 +115,7 @@ exports.updateRule = async (req, res) => {
 };
 
 // Delete rule
-exports.deleteRule = async (req, res) => {
+export const deleteRule = async (req, res) => {
     try {
         const rule = await Rule.findById(req.params.id);
         if (!rule) {

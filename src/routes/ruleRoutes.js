@@ -1,12 +1,19 @@
 // backend/src/routes/ruleRoutes.js
-const express = require('express');
+import express from 'express';
+import {
+    getRules,
+    getRuleById,
+    createRule,
+    updateRule,
+    deleteRule
+} from '../controllers/ruleController.js';
+
 const router = express.Router();
-const ruleController = require('../controllers/ruleController');
 
-router.get('/rules', ruleController.getRules);
-router.get('/rules/:id', ruleController.getRuleById);
-router.post('/rules', ruleController.createRule);
-router.put('/rules/:id', ruleController.updateRule);
-router.delete('/rules/:id', ruleController.deleteRule);
+router.get('/rules', getRules);
+router.get('/rules/:id', getRuleById);
+router.post('/rules', createRule);
+router.put('/rules/:id', updateRule);
+router.delete('/rules/:id', deleteRule);
 
-module.exports = router;
+export default router;

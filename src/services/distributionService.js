@@ -1,8 +1,8 @@
 // backend/src/services/distributionService.js
-const Lead = require('../models/Lead');
-const Client = require('../models/Client');
-const ruleEngine = require('./ruleEngine');
-const mappingService = require('./mappingService');
+import Lead from '../models/Lead.js';
+import Client from '../models/Client.js';
+import ruleEngine from './ruleEngine.js';
+import mappingService from './mappingService.js';
 
 /**
  * Distribution Service
@@ -192,4 +192,4 @@ class DistributionService {
 }
 
 // Singleton instance export
-module.exports = new DistributionService();
+export default new DistributionService();

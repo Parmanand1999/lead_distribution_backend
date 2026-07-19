@@ -1,8 +1,13 @@
 // backend/src/app.js
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const dotenv = require('dotenv');
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+
+import leadRoutes from './routes/leadRoutes.js';
+import clientRoutes from './routes/clientRoutes.js';
+import ruleRoutes from './routes/ruleRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -22,10 +27,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Routes
-app.use('/api', require('./routes/leadRoutes'));
-app.use('/api', require('./routes/clientRoutes'));
-app.use('/api', require('./routes/ruleRoutes'));
-app.use('/api', require('./routes/reportRoutes'));
+app.use('/api', leadRoutes);
+app.use('/api', clientRoutes);
+app.use('/api', ruleRoutes);
+app.use('/api', reportRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -54,4 +59,4 @@ app.use((err, req, res, next) => {
     });
 });
 
-module.exports = app;
+export default app;

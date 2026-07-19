@@ -1,5 +1,5 @@
 // backend/src/models/Rule.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 /**
  * Rule Schema
@@ -96,4 +96,5 @@ ruleSchema.methods.incrementLeadsAssigned = function() {
     return this.save();
 };
 
-module.exports = mongoose.model('Rule', ruleSchema);
+const Rule = mongoose.model('Rule', ruleSchema);
+export default Rule;

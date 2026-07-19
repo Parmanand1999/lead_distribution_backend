@@ -1,8 +1,8 @@
 // backend/src/controllers/clientController.js
-const Client = require('../models/Client');
+import Client from '../models/Client.js';
 
 // Get all clients
-exports.getClients = async (req, res) => {
+export const getClients = async (req, res) => {
     try {
         const clients = await Client.find({}).sort({ createdAt: -1 });
         res.json({
@@ -20,7 +20,7 @@ exports.getClients = async (req, res) => {
 };
 
 // Get single client by ID
-exports.getClientById = async (req, res) => {
+export const getClientById = async (req, res) => {
     try {
         const client = await Client.findById(req.params.id);
         if (!client) {
@@ -44,7 +44,7 @@ exports.getClientById = async (req, res) => {
 };
 
 // Create new client
-exports.createClient = async (req, res) => {
+export const createClient = async (req, res) => {
     try {
         const { name, company, apiEndpoint, apiKey, fieldMapping, isActive } = req.body;
         
@@ -80,7 +80,7 @@ exports.createClient = async (req, res) => {
 };
 
 // Update client
-exports.updateClient = async (req, res) => {
+export const updateClient = async (req, res) => {
     try {
         const { name, company, apiEndpoint, apiKey, fieldMapping, isActive } = req.body;
         
@@ -115,7 +115,7 @@ exports.updateClient = async (req, res) => {
 };
 
 // Delete client
-exports.deleteClient = async (req, res) => {
+export const deleteClient = async (req, res) => {
     try {
         const client = await Client.findById(req.params.id);
         if (!client) {
