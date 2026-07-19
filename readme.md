@@ -1,35 +1,38 @@
-# Client API Documentation
+---
+---
 
-The Client module is used to manage all clients who can receive leads through the Lead Distribution System. Each client represents a company or organization that can be assigned leads based on matching distribution rules.
+# 📦 Lead Distribution System – API Documentation
 
 ## Base URL
 
-```text
-http://localhost:5000/api/clients
+```
+http://localhost:5000/api
 ```
 
 ---
 
-# Endpoints
+# 1. Client Module
 
-## 1. Get All Clients
+Manages clients (companies/teams) that can receive leads.
 
-**Request**
+### Base Endpoint
+
+```
+/api/clients
+```
+
+### 1.1 Get All Clients
 
 ```http
 GET /api/clients
 ```
 
-### Description
-
-Returns a list of all registered clients.
-
-### Success Response
+**Response**
 
 ```json
 [
   {
-    "_id": "687b1234567890abcdef1234",
+    "_id": "65f1a2b3c4d5e6f7g8h9i0j1",
     "name": "Client A",
     "company": "ABC Realty",
     "isActive": true,
@@ -40,47 +43,21 @@ Returns a list of all registered clients.
 ]
 ```
 
----
-
-## 2. Get Client By ID
-
-**Request**
+### 1.2 Get Client by ID
 
 ```http
 GET /api/clients/:id
 ```
 
-### Example
+**Response** – same as above for single client.
 
-```http
-GET /api/clients/687b1234567890abcdef1234
-```
-
-### Success Response
-
-```json
-{
-  "_id": "687b1234567890abcdef1234",
-  "name": "Client A",
-  "company": "ABC Realty",
-  "isActive": true,
-  "totalLeadsReceived": 25,
-  "createdAt": "2026-07-19T10:20:30.000Z",
-  "updatedAt": "2026-07-19T10:20:30.000Z"
-}
-```
-
----
-
-## 3. Create Client
-
-**Request**
+### 1.3 Create Client
 
 ```http
 POST /api/clients
 ```
 
-### Request Body
+**Body**
 
 ```json
 {
@@ -90,14 +67,14 @@ POST /api/clients
 }
 ```
 
-### Success Response
+**Response**
 
 ```json
 {
   "success": true,
   "message": "Client created successfully",
   "data": {
-    "_id": "687b1234567890abcdef1234",
+    "_id": "...",
     "name": "Client A",
     "company": "ABC Realty",
     "isActive": true
@@ -105,63 +82,31 @@ POST /api/clients
 }
 ```
 
----
-
-## 4. Update Client
-
-**Request**
+### 1.4 Update Client
 
 ```http
 PUT /api/clients/:id
 ```
 
-### Example
+**Body** – any fields to update.
 
-```http
-PUT /api/clients/687b1234567890abcdef1234
-```
-
-### Request Body
-
-```json
-{
-  "company": "ABC Realty Pvt Ltd",
-  "isActive": false
-}
-```
-
-### Success Response
+**Response**
 
 ```json
 {
   "success": true,
   "message": "Client updated successfully",
-  "data": {
-    "_id": "687b1234567890abcdef1234",
-    "name": "Client A",
-    "company": "ABC Realty Pvt Ltd",
-    "isActive": false
-  }
+  "data": { ... }
 }
 ```
 
----
-
-## 5. Delete Client
-
-**Request**
+### 1.5 Delete Client
 
 ```http
 DELETE /api/clients/:id
 ```
 
-### Example
-
-```http
-DELETE /api/clients/687b1234567890abcdef1234
-```
-
-### Success Response
+**Response**
 
 ```json
 {
@@ -172,66 +117,58 @@ DELETE /api/clients/687b1234567890abcdef1234
 
 ---
 
-# Client Object
+### Client Object (Fields)
 
-| Field              | Type    | Description                                    |
-| ------------------ | ------- | ---------------------------------------------- |
-| name               | String  | Unique client name                             |
-| company            | String  | Company or organization name                   |
-| isActive           | Boolean | Indicates whether the client can receive leads |
-| totalLeadsReceived | Number  | Total number of assigned leads                 |
-| createdAt          | Date    | Record creation timestamp                      |
-| updatedAt          | Date    | Last update timestamp                          |
+| Field                | Type     | Description                                     |
+| -------------------- | -------- | ----------------------------------------------- |
+| `_id`                | ObjectId | Unique identifier                               |
+| `name`               | String   | Client name (required, unique)                  |
+| `company`            | String   | Company or organisation name (optional)         |
+| `isActive`           | Boolean  | Can this client receive leads? (default `true`) |
+| `totalLeadsReceived` | Number   | Number of leads assigned so far                 |
+| `createdAt`          | Date     | Creation timestamp                              |
+| `updatedAt`          | Date     | Last update timestamp                           |
 
 ---
 
-# Route Summary
+### Route Summary – Clients
 
 | Method | Endpoint           | Description               |
 | ------ | ------------------ | ------------------------- |
-| GET    | `/api/clients`     | Retrieve all clients      |
-| GET    | `/api/clients/:id` | Retrieve a client by ID   |
+| GET    | `/api/clients`     | List all clients          |
+| GET    | `/api/clients/:id` | Get a client by ID        |
 | POST   | `/api/clients`     | Create a new client       |
 | PUT    | `/api/clients/:id` | Update an existing client |
 | DELETE | `/api/clients/:id` | Delete a client           |
 
-# Rule API Documentation
-
-The Rule module defines the conditions used to distribute incoming leads to the appropriate client. Each rule contains matching criteria such as property type, configuration, city, and budget range. Rules are evaluated in ascending order of priority (lower number = higher priority).
-
-## Base URL
-
-```text
-http://localhost:5000/api/rules
-```
-
 ---
 
-# Endpoints
+# 2. Rule Module
 
-## 1. Get All Rules
+Defines conditions to distribute leads to clients. Rules are evaluated by **priority** (lower number = higher priority).
 
-**Request**
+### Base Endpoint
+
+```
+/api/rules
+```
+
+### 2.1 Get All Rules
 
 ```http
 GET /api/rules
 ```
 
-### Description
-
-Returns a list of all lead distribution rules.
-
-### Success Response
+**Response**
 
 ```json
 [
   {
-    "_id": "687b1234567890abcdef1111",
+    "_id": "65f1a2b3c4d5e6f7g8h9i0k1",
     "name": "Residential 2BHK Delhi",
     "clientId": {
-      "_id": "687b1234567890abcdef2222",
-      "name": "Client A",
-      "company": "ABC Realty"
+      "_id": "65f1a2b3c4d5e6f7g8h9i0j1",
+      "name": "Client A"
     },
     "conditions": {
       "property": "Residential",
@@ -242,67 +179,31 @@ Returns a list of all lead distribution rules.
     },
     "priority": 1,
     "isActive": true,
-    "leadsAssigned": 15
+    "leadsAssigned": 15,
+    "createdAt": "...",
+    "updatedAt": "..."
   }
 ]
 ```
 
----
-
-## 2. Get Rule By ID
-
-**Request**
+### 2.2 Get Rule by ID
 
 ```http
 GET /api/rules/:id
 ```
 
-### Example
-
-```http
-GET /api/rules/687b1234567890abcdef1111
-```
-
-### Success Response
-
-```json
-{
-  "_id": "687b1234567890abcdef1111",
-  "name": "Residential 2BHK Delhi",
-  "clientId": {
-    "_id": "687b1234567890abcdef2222",
-    "name": "Client A",
-    "company": "ABC Realty"
-  },
-  "conditions": {
-    "property": "Residential",
-    "configuration": "2 BHK",
-    "city": "Delhi",
-    "minBudget": 300000,
-    "maxBudget": 600000
-  },
-  "priority": 1,
-  "isActive": true,
-  "leadsAssigned": 15
-}
-```
-
----
-
-## 3. Create Rule
-
-**Request**
+### 2.3 Create Rule
 
 ```http
 POST /api/rules
 ```
 
-### Request Body
+**Body**
 
 ```json
 {
   "name": "Residential 2BHK Delhi",
-  "clientId": "687b1234567890abcdef2222",
+  "clientId": "65f1a2b3c4d5e6f7g8h9i0j1",
   "conditions": {
     "property": "Residential",
     "configuration": "2 BHK",
@@ -315,170 +216,92 @@ POST /api/rules
 }
 ```
 
-### Success Response
+**Response**
 
 ```json
 {
   "success": true,
   "message": "Rule created successfully",
-  "data": {
-    "_id": "687b1234567890abcdef1111",
-    "name": "Residential 2BHK Delhi"
-  }
+  "data": { "_id": "...", "name": "Residential 2BHK Delhi" }
 }
 ```
 
----
-
-## 4. Update Rule
-
-**Request**
+### 2.4 Update Rule
 
 ```http
 PUT /api/rules/:id
 ```
 
-### Example
+**Body** – any fields to update.
 
-```http
-PUT /api/rules/687b1234567890abcdef1111
-```
-
-### Request Body
-
-```json
-{
-  "priority": 2,
-  "isActive": false
-}
-```
-
-### Success Response
-
-```json
-{
-  "success": true,
-  "message": "Rule updated successfully",
-  "data": {
-    "_id": "687b1234567890abcdef1111",
-    "priority": 2,
-    "isActive": false
-  }
-}
-```
-
----
-
-## 5. Delete Rule
-
-**Request**
+### 2.5 Delete Rule
 
 ```http
 DELETE /api/rules/:id
 ```
 
-### Example
+---
 
-```http
-DELETE /api/rules/687b1234567890abcdef1111
-```
+### Rule Object (Fields)
 
-### Success Response
+| Field           | Type     | Description                                           |
+| --------------- | -------- | ----------------------------------------------------- |
+| `_id`           | ObjectId | Unique identifier                                     |
+| `name`          | String   | Rule name (required)                                  |
+| `clientId`      | ObjectId | Reference to the Client that will receive leads       |
+| `conditions`    | Object   | Matching criteria (dynamic key–value pairs)           |
+| `priority`      | Number   | Execution order – lower number = higher priority      |
+| `isActive`      | Boolean  | Is the rule active? (default `true`)                  |
+| `leadsAssigned` | Number   | Number of leads assigned via this rule (auto-updated) |
+| `createdAt`     | Date     | Timestamp                                             |
+| `updatedAt`     | Date     | Timestamp                                             |
 
-```json
-{
-  "success": true,
-  "message": "Rule deleted successfully"
-}
-```
+### Supported Condition Keys
+
+The `conditions` object is flexible. Common keys:
+
+| Key             | Description                       |
+| --------------- | --------------------------------- |
+| `property`      | Property type (e.g., Residential) |
+| `configuration` | Configuration (e.g., 2 BHK)       |
+| `city`          | City name                         |
+| `minBudget`     | Minimum budget (number)           |
+| `maxBudget`     | Maximum budget (number)           |
+| `source`        | Lead source (facebook, google …)  |
+
+> **Matching Logic**: All conditions must match exactly (case‑sensitive for strings). Budget range is inclusive.
 
 ---
 
-# Rule Object
-
-| Field         | Type     | Description                                              |
-| ------------- | -------- | -------------------------------------------------------- |
-| name          | String   | Rule name                                                |
-| clientId      | ObjectId | Client assigned to this rule                             |
-| conditions    | Object   | Matching criteria for lead assignment                    |
-| priority      | Number   | Rule execution priority (lower number = higher priority) |
-| isActive      | Boolean  | Indicates whether the rule is active                     |
-| leadsAssigned | Number   | Total leads assigned through this rule                   |
-| createdAt     | Date     | Record creation timestamp                                |
-| updatedAt     | Date     | Last update timestamp                                    |
-
----
-
-# Supported Rule Conditions
-
-The `conditions` object supports dynamic matching fields.
-
-| Field         | Description                                   |
-| ------------- | --------------------------------------------- |
-| property      | Property type (e.g., Residential, Commercial) |
-| configuration | Property configuration (e.g., 2 BHK, Office)  |
-| city          | Lead city                                     |
-| minBudget     | Minimum budget required                       |
-| maxBudget     | Maximum budget allowed                        |
-
----
-
-# Rule Matching Logic
-
-Rules are evaluated in ascending order of priority.
-
-A rule matches when:
-
-- All string fields (`property`, `configuration`, `city`) match exactly (case-insensitive).
-- The lead budget is greater than or equal to `minBudget`.
-- The lead budget is less than or equal to `maxBudget`.
-- The first matching rule is selected, and no further rules are evaluated.
-- If no rule matches, a fallback rule (if configured) can be used.
-
----
-
-# Route Summary
+### Route Summary – Rules
 
 | Method | Endpoint         | Description             |
 | ------ | ---------------- | ----------------------- |
-| GET    | `/api/rules`     | Retrieve all rules      |
-| GET    | `/api/rules/:id` | Retrieve a rule by ID   |
+| GET    | `/api/rules`     | List all rules          |
+| GET    | `/api/rules/:id` | Get a rule by ID        |
 | POST   | `/api/rules`     | Create a new rule       |
 | PUT    | `/api/rules/:id` | Update an existing rule |
 | DELETE | `/api/rules/:id` | Delete a rule           |
 
-# Lead API Documentation
-
-The Lead module is responsible for receiving leads from multiple sources, normalizing the incoming data, matching the lead against active distribution rules, assigning it to the appropriate client, and storing the lead for future reporting.
-
-## Base URL
-
-```text
-http://localhost:5000/api/leads
-```
-
 ---
 
-# Endpoints
+# 3. Lead Module
 
-## 1. Submit New Lead
+Receives incoming leads, normalises them, matches against rules, assigns to a client, and stores the lead.
 
-**Request**
+### Base Endpoint
+
+```
+/api/leads
+```
+
+### 3.1 Submit a New Lead
 
 ```http
 POST /api/leads
 ```
 
-### Description
-
-Receives a new lead from any supported source and automatically:
-
-- Normalizes the incoming data
-- Matches the lead against active rules
-- Assigns the lead to the first matching client
-- Stores the lead in the database
-
-### Request Body (Facebook Example)
+**Request Body**
 
 ```json
 {
@@ -495,136 +318,82 @@ Receives a new lead from any supported source and automatically:
 }
 ```
 
-### All Source Data
+**Supported Sources & Field Mappings**
 
-```object
-{
-      facebook: {
-        name: "full_name",
-        phone: "phone_number",
-        email: "email",
+The server automatically maps the raw `data` fields to the internal system fields (`name`, `phone`, `email`, `property`, `configuration`, `city`, `budget`) using the following mappings:
 
-        property: "property_type",
-        configuration: "bhk_type",
-        city: "city_name",
-        budget: "budget",
-      },
+| Source    | name            | phone            | email           | property            | configuration        | city        | budget         |
+| --------- | --------------- | ---------------- | --------------- | ------------------- | -------------------- | ----------- | -------------- |
+| facebook  | `full_name`     | `phone_number`   | `email`         | `property_type`     | `bhk_type`           | `city_name` | `budget`       |
+| google    | `full_name`     | `mobile`         | `email_address` | `property_category` | `configuration_type` | `city`      | `budget_range` |
+| instagram | `customer_name` | `contact_number` | `email_id`      | `property_category` | `property_type`      | `city_name` | `budget`       |
+| website   | `name`          | `phone`          | `email`         | `property`          | `configuration`      | `city`      | `budget`       |
+| excel     | (custom)        | (custom)         | (custom)        | (custom)            | (custom)             | (custom)    | (custom)       |
+| other     | (custom)        | (custom)         | (custom)        | (custom)            | (custom)             | (custom)    | (custom)       |
 
-      google: {
-        name: "full_name",
-        phone: "mobile",
-        email: "email_address",
+> For custom sources (`excel`, `other`), you must send the data in system fields directly or provide additional mapping.
 
-        property: "property_category",
-        configuration: "configuration_type",
-        city: "city",
-        budget: "budget_range",
-      },
-
-      instagram: {
-        name: "customer_name",
-        phone: "contact_number",
-        email: "email_id",
-
-        property: "property_category",
-        configuration: "property_type",
-        city: "city_name",
-        budget: "budget",
-      },
-
-      website: {
-        name: "name",
-        phone: "phone",
-        email: "email",
-
-        property: "property",
-        configuration: "configuration",
-        city: "city",
-        budget: "budget",
-      },
-    }
-```
-
-### Success Response
+**Success Response**
 
 ```json
 {
   "success": true,
-  "leadId": "687b1234567890abcdef1234",
+  "leadId": "65f1a2b3c4d5e6f7g8h9i0m1",
   "assignedTo": "Client A",
   "rule": "Residential 2BHK Delhi",
-  "processingTime": 18
+  "processingTime": 18,
+  "status": "assigned"
 }
 ```
 
----
+**If No Rule Matches**
 
-## 2. Get All Leads
+```json
+{
+  "success": true,
+  "leadId": "65f1a2b3c4d5e6f7g8h9i0m1",
+  "assignedTo": null,
+  "rule": null,
+  "status": "pending",
+  "message": "No matching rule found – lead is pending."
+}
+```
 
-**Request**
+### 3.2 Get All Leads
 
 ```http
 GET /api/leads
 ```
 
-### Description
+**Response** – array of leads (populated with client/rule details).
 
-Returns all stored leads. This endpoint may also support filtering and pagination if implemented.
-
-### Success Response
-
-```json
-[
-  {
-    "_id": "687b1234567890abcdef1234",
-    "source": "facebook",
-    "clientId": {
-      "_id": "687b1234567890abcdef1111",
-      "name": "Client A"
-    },
-    "ruleId": {
-      "_id": "687b1234567890abcdef2222",
-      "name": "Residential 2BHK Delhi"
-    },
-    "status": "assigned",
-    "createdAt": "2026-07-19T12:30:00.000Z"
-  }
-]
-```
-
----
-
-## 3. Get Lead By ID
-
-**Request**
+### 3.3 Get Lead by ID
 
 ```http
 GET /api/leads/:id
 ```
 
-### Example
-
-```http
-GET /api/leads/687b1234567890abcdef1234
-```
-
-### Success Response
+**Response**
 
 ```json
 {
-  "_id": "687b1234567890abcdef1234",
+  "_id": "65f1a2b3c4d5e6f7g8h9i0m1",
   "source": "facebook",
-  "rawData": {
-    "full_name": "Rahul Sharma",
-    "phone_number": "9999999999"
+  "rawData": { "full_name": "Rahul Sharma", "phone_number": "9999999999" },
+  "mappedData": {
+    "name": "Rahul Sharma",
+    "phone": "9999999999",
+    "property": "Residential",
+    "configuration": "2 BHK",
+    "city": "Delhi",
+    "budget": 500000
   },
-  "clientId": {
-    "_id": "687b1234567890abcdef1111",
-    "name": "Client A",
-    "company": "ABC Realty"
+  "assignedTo": {
+    "_id": "65f1a2b3c4d5e6f7g8h9i0j1",
+    "name": "Client A"
   },
-  "ruleId": {
-    "_id": "687b1234567890abcdef2222",
+  "rule": {
+    "_id": "65f1a2b3c4d5e6f7g8h9i0k1",
     "name": "Residential 2BHK Delhi"
   },
   "status": "assigned",
@@ -636,107 +405,50 @@ GET /api/leads/687b1234567890abcdef1234
 
 ---
 
-# Supported Lead Sources
+### Lead Object (Fields)
 
-| Source    | Description          |
-| --------- | -------------------- |
-| facebook  | Facebook Lead Ads    |
-| google    | Google Lead Form     |
-| instagram | Instagram Lead Ads   |
-| website   | Website Contact Form |
-| excel     | Bulk Excel Upload    |
-| other     | Any custom source    |
+| Field        | Type     | Description                                            |
+| ------------ | -------- | ------------------------------------------------------ |
+| `_id`        | ObjectId | Unique identifier                                      |
+| `source`     | String   | Source of the lead (enum: facebook, google, …)         |
+| `rawData`    | Object   | Original payload from the source                       |
+| `mappedData` | Object   | Normalised internal data (after mapping)               |
+| `assignedTo` | ObjectId | Reference to the Client (if assigned)                  |
+| `rule`       | ObjectId | Reference to the Rule that matched (if any)            |
+| `status`     | String   | One of: `pending`, `assigned`, `processed`, `rejected` |
+| `remarks`    | String   | Additional processing notes (e.g., error description)  |
+| `createdAt`  | Date     | Timestamp                                              |
+| `updatedAt`  | Date     | Timestamp                                              |
 
 ---
 
-# Lead Processing Flow
+### Route Summary – Leads
 
-```text
-Incoming Lead
-      │
-      ▼
-Receive API Request
-      │
-      ▼
-Normalize Source Fields
-      │
-      ▼
-Rule Matching Engine
-      │
-      ▼
-Client Assignment
-      │
-      ▼
-Save Lead
-      │
-      ▼
-Return Response
+| Method | Endpoint         | Description             |
+| ------ | ---------------- | ----------------------- |
+| POST   | `/api/leads`     | Submit a new lead       |
+| GET    | `/api/leads`     | List all leads          |
+| GET    | `/api/leads/:id` | Get a single lead by ID |
+
+---
+
+# 4. Reports Module
+
+Provides aggregated statistics for dashboards and monitoring.
+
+### Base Endpoint
+
+```
+/api/reports
 ```
 
----
-
-# Lead Object
-
-| Field     | Type     | Description                             |
-| --------- | -------- | --------------------------------------- |
-| source    | String   | Source from which the lead was received |
-| rawData   | Object   | Original lead payload                   |
-| clientId  | ObjectId | Assigned client                         |
-| ruleId    | ObjectId | Matched rule                            |
-| status    | String   | Lead status                             |
-| remarks   | String   | Processing remarks                      |
-| createdAt | Date     | Lead creation timestamp                 |
-| updatedAt | Date     | Last update timestamp                   |
-
----
-
-# Route Summary
-
-| Method | Endpoint         | Description           |
-| ------ | ---------------- | --------------------- |
-| POST   | `/api/leads`     | Submit a new lead     |
-| GET    | `/api/leads`     | Retrieve all leads    |
-| GET    | `/api/leads/:id` | Retrieve a lead by ID |
-
-# Reports API Documentation
-
-The Reports module provides aggregated statistics for the Lead Distribution System. It is primarily used to display dashboard metrics such as total leads, lead status distribution, source-wise analytics, client-wise assignments, and rule performance.
-
-## Base URL
-
-```text
-http://localhost:5000/api/reports
-```
-
----
-
-# Endpoints
-
-## 1. Dashboard Statistics
-
-**Request**
+### 4.1 Dashboard Statistics
 
 ```http
 GET /api/reports/dashboard
 ```
 
-### Description
-
-Returns overall dashboard statistics for the lead distribution system.
-
-Typical metrics include:
-
-- Total leads
-- Total clients
-- Total active rules
-- Lead status summary
-- Source-wise lead distribution
-- Client-wise lead assignment
-- Rule-wise assignment statistics
-
----
-
-### Success Response
+**Response**
 
 ```json
 {
@@ -754,54 +466,20 @@ Typical metrics include:
       "rejected": 2
     },
     "sourceDistribution": [
-      {
-        "source": "facebook",
-        "count": 60
-      },
-      {
-        "source": "google",
-        "count": 40
-      },
-      {
-        "source": "instagram",
-        "count": 30
-      },
-      {
-        "source": "website",
-        "count": 20
-      }
+      { "source": "facebook", "count": 60 },
+      { "source": "google", "count": 40 },
+      { "source": "instagram", "count": 30 },
+      { "source": "website", "count": 20 }
     ],
     "clientDistribution": [
-      {
-        "client": "Client A",
-        "leadsAssigned": 70
-      },
-      {
-        "client": "Client B",
-        "leadsAssigned": 45
-      },
-      {
-        "client": "Client C",
-        "leadsAssigned": 30
-      }
+      { "client": "Client A", "leadsAssigned": 70 },
+      { "client": "Client B", "leadsAssigned": 45 },
+      { "client": "Client C", "leadsAssigned": 30 }
     ],
     "ruleDistribution": [
-      {
-        "rule": "Residential 2BHK Delhi",
-        "leadsAssigned": 40
-      },
-      {
-        "rule": "Commercial Office Noida",
-        "leadsAssigned": 35
-      },
-      {
-        "rule": "Residential 3BHK Gurgaon",
-        "leadsAssigned": 30
-      },
-      {
-        "rule": "Default Rule",
-        "leadsAssigned": 40
-      }
+      { "rule": "Residential 2BHK Delhi", "leadsAssigned": 40 },
+      { "rule": "Commercial Office Noida", "leadsAssigned": 35 },
+      { "rule": "Default Rule", "leadsAssigned": 40 }
     ]
   }
 }
@@ -809,36 +487,105 @@ Typical metrics include:
 
 ---
 
-# Dashboard Metrics
+### Route Summary – Reports
 
-| Metric             | Description                           |
-| ------------------ | ------------------------------------- |
-| totalLeads         | Total number of leads received        |
-| totalClients       | Total registered clients              |
-| totalRules         | Total configured rules                |
-| activeRules        | Number of active rules                |
-| leadStatus         | Lead count grouped by status          |
-| sourceDistribution | Lead count grouped by source          |
-| clientDistribution | Lead count grouped by assigned client |
-| ruleDistribution   | Lead count grouped by matched rule    |
+| Method | Endpoint                 | Description                      |
+| ------ | ------------------------ | -------------------------------- |
+| GET    | `/api/reports/dashboard` | Get dashboard summary statistics |
 
 ---
 
-# Dashboard Analytics
+# 🧭 Lead Processing Flow
 
-The dashboard helps monitor the overall health of the Lead Distribution System by providing:
-
-- Overall lead statistics
-- Source-wise lead trends
-- Client performance
-- Rule performance
-- Lead assignment summary
-- Pending and rejected lead tracking
+```
+Incoming Lead (POST /api/leads)
+       │
+       ▼
+Extract source & raw data
+       │
+       ▼
+Map raw fields → system fields (mappedData)
+       │
+       ▼
+Fetch all active rules (sorted by priority)
+       │
+       ▼
+Find first rule whose conditions match mappedData
+       │
+       ▼
+If found → assign lead to rule.clientId
+       │
+       ▼
+Update lead status to "assigned", store rule & client
+       │
+       ▼
+Increment rule.leadsAssigned & client.totalLeadsReceived
+       │
+       ▼
+Return response with assignment details
+       │
+       ▼
+(If no rule matches → lead remains "pending")
+```
 
 ---
 
-# Route Summary
+4. Reports Module (Updated)
+   4.1 Dashboard Statistics
+   http
+   GET /api/reports/dashboard
+   Response
 
-| Method | Endpoint                 | Description                                         |
-| ------ | ------------------------ | --------------------------------------------------- |
-| GET    | `/api/reports/dashboard` | Retrieve dashboard analytics and summary statistics |
+json
+{
+"success": true,
+"data": {
+"summary": {
+"total": 150,
+"pending": 3,
+"assigned": 145,
+"processed": 0,
+"rejected": 2
+},
+"sourceDistribution": [
+{ "_id": "facebook", "count": 60 },
+{ "_id": "google", "count": 40 },
+{ "_id": "instagram", "count": 30 },
+{ "_id": "website", "count": 20 }
+],
+"clientDistribution": [
+{
+"clientId": "65f1a2b3...",
+"name": "Client A",
+"company": "ABC Realty",
+"count": 70
+},
+{
+"clientId": "65f1a2b3...",
+"name": "Client B",
+"company": "XYZ Developers",
+"count": 45
+}
+],
+"recentLeads": [
+{
+"_id": "65f1a2b3...",
+"source": "facebook",
+"assignedTo": { "name": "Client A", "company": "ABC Realty" },
+"rule": { "name": "Residential 2BHK Delhi" },
+"status": "assigned",
+"createdAt": "2026-07-19T12:30:00.000Z"
+}
+// ... maximum 10 recent leads
+]
+}
+}
+Fields Explanation
+Key Description
+summary Lead count grouped by status (total, pending, assigned, processed, rejected)
+sourceDistribution Lead count grouped by source (sorted descending)
+clientDistribution Lead count grouped by assigned client (includes client details and count)
+recentLeads Last 10 leads with populated assignedTo and rule fields
+Route Summary (Updated)
+Method Endpoint Description
+GET /api/reports/dashboard Retrieve dashboard analytics and summary statistics (including recent leads)
